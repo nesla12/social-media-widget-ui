@@ -26,7 +26,7 @@ function renderMarkdown(text: string): JSX.Element[] {
     const h3Match = line.match(/^###\s+(.*)$/);
     if (h3Match) {
       elements.push(
-        <div key={index} className="font-semibold text-base mt-3 mb-1 text-red-400">{processInlineMarkdown(h3Match[1])}</div>
+        <div key={index} className="font-semibold text-base mt-3 mb-1 text-[#d8d3cc]">{processInlineMarkdown(h3Match[1])}</div>
       );
       return;
     }
@@ -34,7 +34,7 @@ function renderMarkdown(text: string): JSX.Element[] {
     const h2Match = line.match(/^##\s+(.*)$/);
     if (h2Match) {
       elements.push(
-        <div key={index} className="font-semibold text-lg mt-3 mb-1 text-red-400">{processInlineMarkdown(h2Match[1])}</div>
+        <div key={index} className="font-semibold text-lg mt-3 mb-1 text-[#d8d3cc]">{processInlineMarkdown(h2Match[1])}</div>
       );
       return;
     }
@@ -42,7 +42,7 @@ function renderMarkdown(text: string): JSX.Element[] {
     const h1Match = line.match(/^#\s+(.*)$/);
     if (h1Match) {
       elements.push(
-        <div key={index} className="font-bold text-xl mt-3 mb-1 text-red-400">{processInlineMarkdown(h1Match[1])}</div>
+        <div key={index} className="font-bold text-xl mt-3 mb-1 text-[#d8d3cc]">{processInlineMarkdown(h1Match[1])}</div>
       );
       return;
     }
@@ -52,7 +52,7 @@ function renderMarkdown(text: string): JSX.Element[] {
     if (listMatch) {
       elements.push(
         <div key={index} className="flex items-start gap-2 ml-1 my-1">
-          <span className="text-red-500 mt-0.5">•</span>
+          <span className="text-[#806429] mt-0.5">•</span>
           <span>{processInlineMarkdown(listMatch[1])}</span>
         </div>
       );
@@ -267,10 +267,10 @@ export default function Chat() {
   return (
     <div className="flex flex-col h-screen max-h-screen bg-black">
       {/* Header */}
-      <div className="flex-shrink-0 bg-gradient-to-r from-black via-gray-900 to-black text-white px-4 py-4 shadow-lg border-b border-red-600/30">
+      <div className="flex-shrink-0 bg-gradient-to-r from-black via-gray-900 to-black text-white px-4 py-4 shadow-lg border-b border-[#806429]/30">
         <div className="flex items-center gap-3">
           {/* Avatar */}
-          <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center overflow-hidden flex-shrink-0 border border-red-600/50">
+          <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center overflow-hidden flex-shrink-0 border-2 border-[#806429]">
             <img
               src="https://cdn.prod.website-files.com/6690ef66366329732cd9ae97/66cc446438c49017aa9237cf_Logo%20-%20Tristan%20Weithaler%20(TW)%20(1).avif"
               alt="Tristan Weithaler"
@@ -288,7 +288,7 @@ export default function Chat() {
             <button
               onClick={handleExportText}
               title="Chat als Text exportieren"
-              className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
+              className="p-2 hover:bg-[#806429]/20 rounded-lg transition-colors"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -297,7 +297,7 @@ export default function Chat() {
             <button
               onClick={handleExportJSON}
               title="Chat als JSON exportieren"
-              className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
+              className="p-2 hover:bg-[#806429]/20 rounded-lg transition-colors"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
@@ -306,7 +306,7 @@ export default function Chat() {
             <button
               onClick={handleClearChat}
               title="Chat leeren"
-              className="p-2 hover:bg-red-900/30 rounded-lg transition-colors text-red-400"
+              className="p-2 hover:bg-[#806429]/20 rounded-lg transition-colors text-[#d8d3cc]"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -331,7 +331,7 @@ export default function Chat() {
               }`}
             >
               {message.role === 'assistant' ? (
-                <div className="space-y-1 break-words text-[15px] leading-relaxed">{renderMarkdown(message.content)}</div>
+                <div className="space-y-1 break-words text-[15px] leading-relaxed text-gray-100">{renderMarkdown(message.content)}</div>
               ) : (
                 <p className="whitespace-pre-wrap break-words text-[15px]">{message.content}</p>
               )}
@@ -344,9 +344,9 @@ export default function Chat() {
           <div className="flex justify-start">
             <div className="bg-gray-900 px-4 py-3 rounded-2xl rounded-bl-md border border-gray-800">
               <div className="flex space-x-1.5">
-                <div className="w-2 h-2 bg-red-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                <div className="w-2 h-2 bg-red-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                <div className="w-2 h-2 bg-red-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                <div className="w-2 h-2 bg-[#806429] rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                <div className="w-2 h-2 bg-[#806429] rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                <div className="w-2 h-2 bg-[#806429] rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
               </div>
             </div>
           </div>
@@ -355,7 +355,7 @@ export default function Chat() {
         {/* Error Message */}
         {error && (
           <div className="flex justify-center">
-            <div className="bg-red-900/30 text-red-400 px-4 py-2 rounded-lg text-sm border border-red-800/50">
+            <div className="bg-[#806429]/20 text-[#d8d3cc] px-4 py-2 rounded-lg text-sm border border-[#806429]/50">
               {error}
             </div>
           </div>
@@ -376,12 +376,12 @@ export default function Chat() {
             onChange={(e) => setInput(e.target.value)}
             placeholder="Deine Nachricht..."
             disabled={isLoading}
-            className="flex-1 px-4 py-2.5 bg-gray-900 border border-gray-800 text-white placeholder-gray-500 rounded-full focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent disabled:bg-gray-900/50 disabled:text-gray-500 transition-all"
+            className="flex-1 px-4 py-2.5 bg-gray-900 border border-gray-800 text-white placeholder-gray-500 rounded-full focus:outline-none focus:ring-2 focus:ring-[#806429] focus:border-transparent disabled:bg-gray-900/50 disabled:text-gray-500 transition-all"
           />
           <button
             type="submit"
             disabled={!input.trim() || isLoading}
-            className="px-5 py-2.5 gradient-btn text-white rounded-full font-medium hover:opacity-90 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-lg shadow-red-500/20"
+            className="px-5 py-2.5 gradient-btn text-white rounded-full font-medium hover:opacity-90 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-lg shadow-[#806429]/30"
           >
             {isLoading ? (
               <svg className="w-5 h-5 animate-spin" viewBox="0 0 24 24">
