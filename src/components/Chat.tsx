@@ -279,14 +279,9 @@ export default function Chat() {
           </div>
           <div className="flex-1">
             <h1 className="text-lg font-bold">Social Coach by Tristan</h1>
-            <a
-              href="https://www.tristanweithaler.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-red-400 hover:text-red-300 transition-colors"
-            >
-              Social Media & Business Coach
-            </a>
+            <p className="text-sm text-gray-400">
+              Dein persönlicher KI-Assistent
+            </p>
           </div>
           {/* Action Buttons */}
           <div className="flex items-center gap-2">
