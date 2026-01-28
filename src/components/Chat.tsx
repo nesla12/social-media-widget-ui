@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, FormEvent } from 'react';
 import { Message } from '@/types';
 
 const API_URL = '/api/chat';
+const STORAGE_KEY = 'social-coach-chat-history';
 
 const WELCOME_MESSAGE = `Hey 👋 Ich bin dein Social Coach by Tristan – dein persönlicher KI-Coach für Social Media Wachstum.
 Gemeinsam bringen wir deine Social-Media-Präsenz aufs nächste Level – strategisch, authentisch und mit Spaß an der Umsetzung! 🚀
@@ -110,14 +111,39 @@ function processInlineMarkdown(text: string): React.ReactNode {
 }
 
 export default function Chat() {
-  const [messages, setMessages] = useState<Message[]>([
-    {
+  // Load messages from localStorage or use welcome message
+  const [messages, setMessages] = useState<Message[]>(() => {
+    if (typeof window === 'undefined') return [{
       id: 'welcome',
       content: WELCOME_MESSAGE,
       role: 'assistant',
       timestamp: new Date(),
+    }];
+
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        return parsed.map((msg: any) => ({
+          ...msg,
+          timestamp: new Date(msg.timestamp)
+        }));
+      } catch {
+        return [{
+          id: 'welcome',
+          content: WELCOME_MESSAGE,
+          role: 'assistant',
+          timestamp: new Date(),
+        }];
+      }
     }
-  ]);
+    return [{
+      id: 'welcome',
+      content: WELCOME_MESSAGE,
+      role: 'assistant',
+      timestamp: new Date(),
+    }];
+  });
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -127,9 +153,65 @@ export default function Chat() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // Save messages to localStorage whenever they change
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+    }
+  }, [messages]);
+
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Clear chat history
+  const handleClearChat = () => {
+    if (confirm('Möchtest du den Chat-Verlauf wirklich löschen?')) {
+      const welcomeMsg = {
+        id: 'welcome',
+        content: WELCOME_MESSAGE,
+        role: 'assistant' as const,
+        timestamp: new Date(),
+      };
+      setMessages([welcomeMsg]);
+      localStorage.removeItem(STORAGE_KEY);
+    }
+  };
+
+  // Export chat as text
+  const handleExportText = () => {
+    const text = messages
+      .map((msg) => {
+        const time = msg.timestamp.toLocaleString('de-DE');
+        const role = msg.role === 'user' ? 'Du' : 'Social Coach';
+        return `[${time}] ${role}:\n${msg.content}\n`;
+      })
+      .join('\n---\n\n');
+
+    const blob = new Blob([text], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `chat-export-${new Date().toISOString().split('T')[0]}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  // Export chat as JSON
+  const handleExportJSON = () => {
+    const json = JSON.stringify(messages, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `chat-export-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -196,15 +278,45 @@ export default function Chat() {
             />
           </div>
           <div className="flex-1">
-            <h1 className="text-lg font-bold">KI Chat Assistant</h1>
+            <h1 className="text-lg font-bold">Social Coach by Tristan</h1>
             <a
               href="https://www.tristanweithaler.com/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm text-red-400 hover:text-red-300 transition-colors"
             >
-              Tristan Weithaler - Social Media & Business Coach
+              Social Media & Business Coach
             </a>
+          </div>
+          {/* Action Buttons */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleExportText}
+              title="Chat als Text exportieren"
+              className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </button>
+            <button
+              onClick={handleExportJSON}
+              title="Chat als JSON exportieren"
+              className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+              </svg>
+            </button>
+            <button
+              onClick={handleClearChat}
+              title="Chat leeren"
+              className="p-2 hover:bg-red-900/30 rounded-lg transition-colors text-red-400"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
           </div>
         </div>
       </div>
