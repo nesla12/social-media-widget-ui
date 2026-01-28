@@ -123,8 +123,8 @@ export default function Chat() {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       try {
-        const parsed = JSON.parse(saved);
-        return parsed.map((msg: any) => ({
+        const parsed = JSON.parse(saved) as Array<Omit<Message, 'timestamp'> & { timestamp: string }>;
+        return parsed.map((msg) => ({
           ...msg,
           timestamp: new Date(msg.timestamp)
         }));
