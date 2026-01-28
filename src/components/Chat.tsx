@@ -331,7 +331,7 @@ export default function Chat() {
             <div
               className={`max-w-[85%] px-4 py-3 rounded-2xl shadow-md ${
                 message.role === 'user'
-                  ? 'bg-gradient-to-r from-red-600 to-red-700 text-white rounded-br-md'
+                  ? 'gradient-btn text-white rounded-br-md'
                   : 'bg-gray-900 text-gray-100 rounded-bl-md border border-gray-800'
               }`}
             >
@@ -386,7 +386,7 @@ export default function Chat() {
           <button
             type="submit"
             disabled={!input.trim() || isLoading}
-            className="px-5 py-2.5 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-full font-medium hover:from-red-500 hover:to-red-600 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-lg shadow-red-500/20"
+            className="px-5 py-2.5 gradient-btn text-white rounded-full font-medium hover:opacity-90 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-lg shadow-red-500/20"
           >
             {isLoading ? (
               <svg className="w-5 h-5 animate-spin" viewBox="0 0 24 24">
