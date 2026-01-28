@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat Widget Test</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    h1 {
+      color: white;
+      text-align: center;
+      margin-bottom: 40px;
+      font-size: 2.5rem;
+    }
+    .section {
+      background: white;
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 40px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+    .section h2 {
+      color: #333;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+    .section p {
+      color: #666;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    .iframe-container {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+    .code-block {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 15px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 12px;
+      overflow-x: auto;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Chat Widget Embed Test</h1>
+
+    <!-- Option 1: Fullscreen iframe -->
+    <div class="section">
+      <h2>Option 1: Eingebettetes Widget (iframe)</h2>
+      <p>Das Widget wird direkt in die Seite eingebettet. Ideal fuer dedizierte Support-Seiten.</p>
+
+      <div class="iframe-container">
+        <iframe
+          src="https://social-media-widget-ui.vercel.app"
+          width="100%"
+          height="500"
+          style="border: none;"
+        ></iframe>
+      </div>
+
+      <div class="code-block">
+        &lt;iframe src="https://social-media-widget-ui.vercel.app" width="100%" height="600" style="border: none; border-radius: 12px;"&gt;&lt;/iframe&gt;
+      </div>
+    </div>
+
+    <!-- Option 2 Info -->
+    <div class="section">
+      <h2>Option 2: Floating Chat Button</h2>
+      <p>Schau unten rechts - dort ist der Chat-Button. Klicke darauf um das Chat-Fenster zu oeffnen/schliessen.</p>
+      <p><strong>Perfekt fuer:</strong> E-Commerce, Landing Pages, Blogs - ueberall wo der Chat nicht im Weg sein soll.</p>
+
+      <div class="code-block">
+        Siehe den Floating Button unten rechts auf dieser Seite!
+      </div>
+    </div>
+
+    <!-- Dummy content to show floating works with scroll -->
+    <div class="section">
+      <h2>Test: Scrollen</h2>
+      <p>Scrolle auf dieser Seite um zu sehen, dass der Floating-Button immer sichtbar bleibt.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+    </div>
+  </div>
+
+  <!-- Option 2: Floating Chat Button -->
+  <div id="chat-widget-container">
+    <iframe
+      id="chat-widget-iframe"
+      src="https://social-media-widget-ui.vercel.app"
+      style="display: none; position: fixed; bottom: 90px; right: 20px; width: 380px; height: 520px; border: none; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); z-index: 9999;"
+    ></iframe>
+    <button
+      id="chat-widget-button"
+      onclick="toggleChat()"
+      style="position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; border-radius: 50%; background: #4F46E5; border: none; cursor: pointer; box-shadow: 0 4px 20px rgba(79,70,229,0.4); z-index: 9999; display: flex; align-items: center; justify-content: center; transition: transform 0.2s;"
+      onmouseover="this.style.transform='scale(1.1)'"
+      onmouseout="this.style.transform='scale(1)'"
+    >
+      <svg id="chat-icon" width="28" height="28" viewBox="0 0 24 24" fill="white">
+        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
+      </svg>
+      <svg id="close-icon" width="28" height="28" viewBox="0 0 24 24" fill="white" style="display: none;">
+        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+      </svg>
+    </button>
+  </div>
+
+  <script>
+    let chatOpen = false;
+
+    function toggleChat() {
+      const iframe = document.getElementById('chat-widget-iframe');
+      const chatIcon = document.getElementById('chat-icon');
+      const closeIcon = document.getElementById('close-icon');
+
+      chatOpen = !chatOpen;
+
+      if (chatOpen) {
+        iframe.style.display = 'block';
+        chatIcon.style.display = 'none';
+        closeIcon.style.display = 'block';
+      } else {
+        iframe.style.display = 'none';
+        chatIcon.style.display = 'block';
+        closeIcon.style.display = 'none';
+      }
+    }
+  </script>
+</body>
+</html>
