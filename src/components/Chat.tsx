@@ -10,9 +10,9 @@ const WELCOME_MESSAGE = `Hey 👋 Ich bin dein Social Coach by Tristan – dein 
 Gemeinsam bringen wir deine Social-Media-Präsenz aufs nächste Level – strategisch, authentisch und mit Spaß an der Umsetzung! 🚀
 
 Womit möchtest du starten?
-• 🚀 Reichweite & Wachstum
+• ⭐ Vision & Zielsetzung
 • 🎯 Positionierung & Branding
-• 📸 Content & Reels
+• 🚀 Reichweite & Wachstum
 • 💬 Community & Engagement
 • 💰 Monetarisierung`;
 
