@@ -80,31 +80,75 @@ function processInlineMarkdown(text: string): React.ReactNode {
   let key = 0;
 
   while (remaining.length > 0) {
+    // Markdown link: [text](url)
+    const mdLinkMatch = remaining.match(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/);
+
+    // Plain URL: https://... or http://...
+    const urlMatch = remaining.match(/(https?:\/\/[^\s<>"\]]+)/);
+
     // Bold: **text**
     const boldMatch = remaining.match(/\*\*(.+?)\*\*/);
-    if (boldMatch && boldMatch.index !== undefined) {
-      if (boldMatch.index > 0) {
-        parts.push(remaining.slice(0, boldMatch.index));
-      }
-      parts.push(<strong key={key++} className="font-semibold text-white">{boldMatch[1]}</strong>);
-      remaining = remaining.slice(boldMatch.index + boldMatch[0].length);
-      continue;
-    }
 
     // Italic: *text* (but not **)
     const italicMatch = remaining.match(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/);
-    if (italicMatch && italicMatch.index !== undefined) {
-      if (italicMatch.index > 0) {
-        parts.push(remaining.slice(0, italicMatch.index));
-      }
-      parts.push(<em key={key++}>{italicMatch[1]}</em>);
-      remaining = remaining.slice(italicMatch.index + italicMatch[0].length);
-      continue;
+
+    // Find which match comes first
+    const matches = [
+      { type: 'mdLink', match: mdLinkMatch },
+      { type: 'url', match: urlMatch },
+      { type: 'bold', match: boldMatch },
+      { type: 'italic', match: italicMatch },
+    ].filter(m => m.match && m.match.index !== undefined)
+     .sort((a, b) => (a.match!.index!) - (b.match!.index!));
+
+    if (matches.length === 0) {
+      parts.push(remaining);
+      break;
     }
 
-    // No more matches, add the rest
-    parts.push(remaining);
-    break;
+    const first = matches[0];
+    const match = first.match!;
+
+    // Add text before the match
+    if (match.index! > 0) {
+      parts.push(remaining.slice(0, match.index));
+    }
+
+    // Process the match
+    if (first.type === 'mdLink') {
+      const linkText = mdLinkMatch![1];
+      const linkUrl = mdLinkMatch![2];
+      parts.push(
+        <a
+          key={key++}
+          href={linkUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[#c9a227] hover:text-[#e6b800] underline"
+        >
+          {linkText}
+        </a>
+      );
+    } else if (first.type === 'url') {
+      const url = match[1];
+      parts.push(
+        <a
+          key={key++}
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[#c9a227] hover:text-[#e6b800] underline break-all"
+        >
+          {url}
+        </a>
+      );
+    } else if (first.type === 'bold') {
+      parts.push(<strong key={key++} className="font-semibold text-white">{boldMatch![1]}</strong>);
+    } else if (first.type === 'italic') {
+      parts.push(<em key={key++}>{italicMatch![1]}</em>);
+    }
+
+    remaining = remaining.slice(match.index! + match[0].length);
   }
 
   return parts.length === 1 ? parts[0] : <>{parts}</>;
