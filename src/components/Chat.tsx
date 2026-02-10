@@ -5,6 +5,16 @@ import { Message } from '@/types';
 
 const API_URL = '/api/chat';
 const STORAGE_KEY = 'social-coach-chat-history';
+const SESSION_ID_KEY = 'social-coach-session-id';
+
+function getOrCreateSessionId(): string {
+  if (typeof window === 'undefined') return crypto.randomUUID();
+  const existing = localStorage.getItem(SESSION_ID_KEY);
+  if (existing) return existing;
+  const newId = crypto.randomUUID();
+  localStorage.setItem(SESSION_ID_KEY, newId);
+  return newId;
+}
 
 const WELCOME_MESSAGE = `Hey 👋 Ich bin dein Social Coach by Tristan – dein persönlicher KI-Coach für Social Media Wachstum.
 Gemeinsam bringen wir deine Social-Media-Präsenz aufs nächste Level – strategisch, authentisch und mit Spaß an der Umsetzung! 🚀
@@ -219,6 +229,7 @@ export default function Chat() {
       };
       setMessages([welcomeMsg]);
       localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(SESSION_ID_KEY);
     }
   };
 
@@ -279,7 +290,7 @@ export default function Chat() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message: userMessage.content }),
+        body: JSON.stringify({ message: userMessage.content, sessionId: getOrCreateSessionId() }),
       });
 
       if (!response.ok) {
