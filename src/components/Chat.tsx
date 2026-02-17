@@ -16,15 +16,9 @@ function getOrCreateSessionId(): string {
   return newId;
 }
 
-const WELCOME_MESSAGE = `Hey 👋 Ich bin dein Social Coach by Tristan – dein persönlicher KI-Coach für Social Media Wachstum.
-Gemeinsam bringen wir deine Social-Media-Präsenz aufs nächste Level – strategisch, authentisch und mit Spaß an der Umsetzung! 🚀
+const WELCOME_MESSAGE = `Mega, dass du hier bist 🙂
 
-Womit möchtest du starten?
-• ⭐ Vision & Zielsetzung
-• 🎯 Positionierung & Branding
-• 🚀 Reichweite & Wachstum
-• 💬 Community & Engagement
-• 💰 Monetarisierung`;
+Sag mir gerne, bei welchem Modul bzw. welcher Lektion du dich gerade befindest oder bei welcher Workbook-Aufgabe du Hilfe benötigst. Dann legen wir sofort los! 🚀`;
 
 // Simple markdown renderer
 function renderMarkdown(text: string): JSX.Element[] {
