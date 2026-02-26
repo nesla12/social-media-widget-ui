@@ -16,9 +16,11 @@ function getOrCreateSessionId(): string {
   return newId;
 }
 
-const WELCOME_MESSAGE = `Mega, dass du hier bist 🙂
+const WELCOME_MESSAGE = `Hallo, ich bin Tristy, dein persönlicher KI-Assistent. Schön, dass du hier bist 🙂
 
-Sag mir gerne, bei welchem Modul bzw. welcher Lektion du dich gerade befindest oder bei welcher Workbook-Aufgabe du Hilfe benötigst. Dann legen wir sofort los! 🚀`;
+Sag mir einfach, in welchem Modul und in welcher Lektion du gerade steckst oder bei welcher Workbook-Aufgabe du Unterstützung brauchst.
+
+Dann gehen wir es direkt gemeinsam an. 🚀`;
 
 // Simple markdown renderer
 function renderMarkdown(text: string): JSX.Element[] {
@@ -321,8 +323,8 @@ export default function Chat() {
           {/* Avatar */}
           <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center overflow-hidden flex-shrink-0 border-2 border-[#806429]">
             <img
-              src="https://cdn.prod.website-files.com/6690ef66366329732cd9ae97/66cc446438c49017aa9237cf_Logo%20-%20Tristan%20Weithaler%20(TW)%20(1).avif"
-              alt="Tristan Weithaler"
+              src="/tristy-agent-icon.png"
+              alt="Tristy"
               className="w-full h-full object-cover"
             />
           </div>
