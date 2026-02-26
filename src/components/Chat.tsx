@@ -329,7 +329,7 @@ export default function Chat() {
             />
           </div>
           <div className="flex-1">
-            <h1 className="text-lg font-bold">Social Coach by Tristan</h1>
+            <h1 className="text-lg font-bold">Tristy</h1>
             <p className="text-sm text-gray-400">
               Dein persönlicher KI-Assistent
             </p>
